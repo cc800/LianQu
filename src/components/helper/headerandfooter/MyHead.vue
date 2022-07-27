@@ -1,23 +1,28 @@
 <template>
-  <div class="header" v-if="judge()">
-    <nav>
-      <img v-loading="loading" :src="image_url" class="test_absolute"/>
-      <el-space spacer="|">
-        <router-link to="/main">主页</router-link>
-        <router-link to="/record">记录</router-link>
-        <router-link to="/letter">信件</router-link>
-      </el-space>
-    </nav>
-  </div>
-  <div class="header" v-else-if="judgeManage()">
-    <nav>
-      <h3>管理界面</h3>
-      <el-space spacer="|">
-        <router-link to="/manage/wanManage">Wan</router-link>
-        <router-link to="/manage/queManage">Que</router-link>
-        <router-link to="/manage/infManage">Inf</router-link>
-      </el-space>
-    </nav>
+  <div v-if="mainJudge()">
+    <div style="position: absolute">
+      <el-button type="danger" @click="loginout()">登出</el-button>
+    </div>
+    <div class="header" v-if="judge()">
+      <nav>
+        <img v-loading="loading" :src="image_url" class="test_absolute"/>
+        <el-space spacer="|">
+          <router-link to="/main">主页</router-link>
+          <router-link to="/record">记录</router-link>
+          <router-link to="/letter">信件</router-link>
+        </el-space>
+      </nav>
+    </div>
+    <div class="header" v-else-if="judgeManage()">
+      <nav>
+        <h3>管理界面</h3>
+        <el-space spacer="|">
+          <router-link to="/manage/wanManage">Wan</router-link>
+          <router-link to="/manage/queManage">Que</router-link>
+          <router-link to="/manage/infManage">Inf</router-link>
+        </el-space>
+      </nav>
+    </div>
   </div>
 </template>
 
@@ -50,12 +55,24 @@ export default {
       else
         return false
     },
+    mainJudge(){
+      const whiteList = ["/login"]
+      if (whiteList.indexOf(this.$route.path) !== -1)
+        return false
+      else
+        return true
+    },
     getImage(){
       this.loading=true
       _getImage(1).then((res)=>{
         this.image_url=res.data
         this.loading=false
       })
+    },
+    loginout(){
+      localStorage.removeItem("user")
+      sessionStorage.removeItem("user")
+      this.$router.push({path:"/login"})
     }
   },
   created() {

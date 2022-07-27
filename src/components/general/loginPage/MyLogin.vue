@@ -5,9 +5,8 @@
         <el-card class="marginTop10">
           <h1>登录界面</h1>
           <el-form>
-            <el-switch style="margin-bottom: 10px" active-value="1" inactive-value="0" v-model="user.level"/>
             <el-form-item>
-              <el-input v-model="user.name" placeholder="输入用户名">
+              <el-input v-model="user.email" placeholder="输入邮箱">
                 <template #prepend>
                   <el-icon>
                     <Avatar/>
@@ -42,9 +41,8 @@ export default {
   data() {
     return {
       user: {
-        name: '',
-        password: '',
-        level: '0',
+        email: '',
+        password: ''
       },
       image_url: ''
     }
@@ -53,7 +51,7 @@ export default {
     login() {
       login(this.user).then((res) => {
         if (res.data !== null) {
-          localStorage.setItem("user",JSON.stringify(res.data))
+          localStorage.setItem("user",JSON.stringify(this.user))
           ElMessage({
             duration: 1000,
             type: 'success',
